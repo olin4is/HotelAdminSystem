@@ -1,0 +1,40 @@
+﻿<Window x:Class="HotelAdminSystem.AddBookingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HotelAdminSystem"
+        mc:Ignorable="d"
+        Title="AddBookingWindow" Height="580" Width="600">
+    <Grid Margin="10">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <GroupBox Header="Данные бронирования">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Номер комнаты:" FontSize="18"/>
+                        <ComboBox x:Name="RoomComboBox" FontSize="18" DisplayMemberPath="RoomNumber" Margin="0,5"/>
+
+                        <TextBlock Text="Гость:" Margin="0,10,0,0" FontSize="18"/>
+                        <ComboBox x:Name="GuestComboBox" FontSize="18" DisplayMemberPath="FullName" Margin="0,5"/>
+
+                        <StackPanel HorizontalAlignment="Left">
+                            <TextBlock Text="Дата заезда:" Margin="0,10,0,0" FontSize="18"/>
+                            <DatePicker x:Name="StartDatePicker" FontSize="18" Margin="0,5" Width="150"/>
+                            <TextBlock Text="Дата выезда:" FontSize="18" Margin="0,10,0,0"/>
+                            <DatePicker x:Name="EndDatePicker" FontSize="18" Margin="0,5" Width="150"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Особые пожелания:" FontSize="18" Margin="0,10,0,0"/>
+                        <TextBox x:Name="SpecialRequestsTextBox" FontSize="18" Height="60" TextWrapping="Wrap" Margin="0,5"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+                    <Button Content="Сохранить" Click="SaveButton_Click" Width="150" Margin="0,0,10,0"/>
+                    <Button Content="Отмена" Click="CancelButton_Click" Width="150"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        
+    </Grid>
+</Window>
