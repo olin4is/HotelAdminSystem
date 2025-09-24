@@ -10,7 +10,7 @@
         <StackPanel>
             <TextBlock Text="Выберите гостя:" Margin="0,0,0,10"/>
             <DataGrid x:Name="GuestsGrid" Height="250" AutoGenerateColumns="False"
-                     SelectionMode="Single">
+                     SelectionMode="Single" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" FontSize="18"/>
                     <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="150" FontSize="18"/>

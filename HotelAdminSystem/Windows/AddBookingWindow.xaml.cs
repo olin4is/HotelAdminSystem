@@ -11,7 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HotelAdminSystem.Interfaces;
 using HotelAdminSystem.Models;
+using HotelAdminSystem.Services;
 
 namespace HotelAdminSystem
 {
@@ -20,19 +22,23 @@ namespace HotelAdminSystem
     /// </summary>
     public partial class AddBookingWindow : Window
     {
-        private HotelManager hotelManager;
+        private IBookingService bookingService;
+        private IGuestService guestService;
+        private IRoomService roomService;
 
-        public AddBookingWindow(HotelManager manager)
+        public AddBookingWindow(IHotelService hotelService)
         {
             InitializeComponent();
-            hotelManager = manager;
+            this.bookingService = hotelService;
+            this.guestService = hotelService;
+            this.roomService = hotelService;
             LoadData();
         }
 
         private void LoadData()
         {
-            RoomComboBox.ItemsSource = hotelManager.Rooms;
-            GuestComboBox.ItemsSource = hotelManager.Guests;
+            RoomComboBox.ItemsSource = roomService.GetAllRooms();
+            GuestComboBox.ItemsSource = guestService.GetAllGuests();
 
             StartDatePicker.SelectedDate = DateTime.Today;
             EndDatePicker.SelectedDate = DateTime.Today.AddDays(1);
@@ -58,7 +64,7 @@ namespace HotelAdminSystem
                 return;
             }
 
-            bool success = hotelManager.AddBooking(
+            bool success = bookingService.AddBooking(
                 room.RoomNumber,
                 guest.Id,
                 startDate,

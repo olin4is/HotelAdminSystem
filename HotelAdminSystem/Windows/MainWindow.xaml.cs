@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HotelAdminSystem.Enums;
+using HotelAdminSystem.Interfaces;
 using HotelAdminSystem.Models;
+using HotelAdminSystem.Services;
 
 namespace HotelAdminSystem
 {
@@ -22,7 +24,7 @@ namespace HotelAdminSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        private HotelManager hotelManager;
+        private IHotelService hotelService;
         private Room selectedRoomForBooking;
         private Guest selectedGuest;
         private dynamic selectedBooking;
@@ -30,34 +32,42 @@ namespace HotelAdminSystem
         public MainWindow()
         {
             InitializeComponent();
-            hotelManager = new HotelManager();
+            hotelService = ServiceFactory.CreateHotelService();
+            LoadData();
+        }
+
+        public MainWindow(IHotelService service) // Конструктор для dependency injection
+        {
+            InitializeComponent();
+            hotelService = service;
             LoadData();
         }
 
         private void LoadData()
         {
-            RoomsGrid.ItemsSource = hotelManager.Rooms;
+            RoomsGrid.ItemsSource = hotelService.GetAllRooms();
             RefreshGuestsGrid();
             RefreshBookingsGrid();
         }
 
         private void RefreshGuestsGrid()
         {
-            GuestsGrid.ItemsSource = hotelManager.Guests.ToList();
+            GuestsGrid.ItemsSource = hotelService.GetAllGuests();
         }
 
         private void RefreshBookingsGrid()
         {
-            var bookingView = hotelManager.Bookings.Select(b => new
+            var bookingView = hotelService.GetAllBookings().Select(b => new
             {
                 b.Id,
                 b.RoomNumber,
-                GuestName = hotelManager.Guests.FirstOrDefault(g => g.Id == b.GuestId)?.FullName,
+                GuestName = hotelService.GetGuestById(b.GuestId)?.FullName,
                 b.StartDate,
                 b.EndDate,
-                b.StatusDisplay,
+                b.Status,
                 b.TotalPrice,
-                b.BookingDate
+                b.BookingDate,
+                b.StatusDisplay
             }).ToList();
 
             BookingsGrid.ItemsSource = bookingView;
@@ -81,9 +91,9 @@ namespace HotelAdminSystem
             }
 
             int bookingId = selectedBooking.Id;
-            CheckInButton.IsEnabled = hotelManager.CanCheckIn(bookingId);
-            CheckOutButton.IsEnabled = hotelManager.CanCheckOut(bookingId);
-            CancelBookingButton.IsEnabled = hotelManager.CanCancel(bookingId);
+            CheckInButton.IsEnabled = hotelService.CanCheckIn(bookingId);
+            CheckOutButton.IsEnabled = hotelService.CanCheckOut(bookingId);
+            CancelBookingButton.IsEnabled = hotelService.CanCancel(bookingId);
         }
 
         private void SearchAvailableRooms_Click(object sender, RoutedEventArgs e)
@@ -103,7 +113,7 @@ namespace HotelAdminSystem
                 return;
             }
 
-            var availableRooms = hotelManager.GetAvailableRooms(startDate, endDate);
+            var availableRooms = hotelService.GetAvailableRooms(startDate, endDate);
             AvailableRoomsGrid.ItemsSource = availableRooms;
         }
 
@@ -129,14 +139,14 @@ namespace HotelAdminSystem
             }
 
             // Открываем окно выбора гостя
-            var guestSelectionWindow = new GuestSelectionWindow(hotelManager.Guests);
+            var guestSelectionWindow = new GuestSelectionWindow(hotelService.GetAllGuests());
             if (guestSelectionWindow.ShowDialog() == true)
             {
                 var selectedGuest = guestSelectionWindow.SelectedGuest;
                 DateTime startDate = StartDatePicker.SelectedDate.Value;
                 DateTime endDate = EndDatePicker.SelectedDate.Value;
 
-                bool success = hotelManager.AddBooking(
+                bool success = hotelService.AddBooking(
                     selectedRoomForBooking.RoomNumber,
                     selectedGuest.Id,
                     startDate,
@@ -159,7 +169,7 @@ namespace HotelAdminSystem
         private void AddBooking_Click(object sender, RoutedEventArgs e)
         {
             // Открываем окно создания бронирования
-            var addBookingWindow = new AddBookingWindow(hotelManager);
+            var addBookingWindow = new AddBookingWindow(hotelService);
             if (addBookingWindow.ShowDialog() == true)
             {
                 RefreshBookingsGrid();
@@ -170,7 +180,7 @@ namespace HotelAdminSystem
         private void AddGuest_Click(object sender, RoutedEventArgs e)
         {
             // Открываем окно добавления гостя
-            var addGuestWindow = new AddEditGuestWindow(hotelManager);
+            var addGuestWindow = new AddEditGuestWindow(hotelService);
             if (addGuestWindow.ShowDialog() == true)
             {
                 RefreshGuestsGrid();
@@ -187,7 +197,7 @@ namespace HotelAdminSystem
             }
 
             // Открываем окно редактирования гостя
-            var editGuestWindow = new AddEditGuestWindow(hotelManager, selectedGuest);
+            var editGuestWindow = new AddEditGuestWindow(hotelService, selectedGuest);
             if (editGuestWindow.ShowDialog() == true)
             {
                 RefreshGuestsGrid();
@@ -210,7 +220,7 @@ namespace HotelAdminSystem
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelManager.DeleteGuest(selectedGuest.Id);
+                bool success = hotelService.DeleteGuest(selectedGuest.Id);
                 if (success)
                 {
                     RefreshGuestsGrid();
@@ -224,20 +234,14 @@ namespace HotelAdminSystem
         }
         private void CheckInButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedBooking == null)
-            {
-                MessageBox.Show("Выберите бронирование для отметки заезда");
-                return;
-            }
+            if (selectedBooking == null) return;
 
             var result = MessageBox.Show($"Отметить заезд по бронированию #{selectedBooking.Id}?",
-                                        "Подтверждение заезда",
-                                        MessageBoxButton.YesNo,
-                                        MessageBoxImage.Question);
+                                        "Подтверждение заезда", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelManager.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Confirmed);
+                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Confirmed);
                 if (success)
                 {
                     RefreshBookingsGrid();
@@ -245,7 +249,7 @@ namespace HotelAdminSystem
                 }
                 else
                 {
-                    MessageBox.Show("Не удалось отметить заезд. Возможно статус бронирования не позволяет это сделать.");
+                    MessageBox.Show("Не удалось отметить заезд.");
                 }
             }
         }
@@ -265,7 +269,7 @@ namespace HotelAdminSystem
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelManager.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Completed);
+                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Completed);
                 if (success)
                 {
                     RefreshBookingsGrid();
@@ -293,7 +297,7 @@ namespace HotelAdminSystem
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelManager.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Cancelled);
+                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Cancelled);
                 if (success)
                 {
                     RefreshBookingsGrid();

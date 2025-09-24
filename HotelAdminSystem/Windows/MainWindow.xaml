@@ -83,7 +83,7 @@
                                     <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="170" FontSize="18"/>
                                     <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="150" FontSize="18"/>
                                     <DataGridTextColumn Header="Паспорт" Binding="{Binding Passport}" Width="150" FontSize="18"/>
-                                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding DateOfBirth, StringFormat=d}" Width="150" FontSize="18"/>
+                                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding DateOfBirth, StringFormat=dd.MM.yyyy}" Width="150" FontSize="18"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
@@ -107,8 +107,8 @@
                                 <Button Content="Найти" Click="SearchAvailableRooms_Click" Margin="20,0"/>
                             </StackPanel>
 
-                            <DataGrid x:Name="AvailableRoomsGrid" Height="250" AutoGenerateColumns="False"
-             SelectionChanged="AvailableRoomsGrid_SelectionChanged" IsReadOnly="True">
+                            <DataGrid x:Name="AvailableRoomsGrid" AutoGenerateColumns="False"
+             SelectionChanged="AvailableRoomsGrid_SelectionChanged" MinHeight="340" IsReadOnly="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Номер" Binding="{Binding RoomNumber}" FontSize="18"/>
                                     <DataGridTextColumn Header="Тип" Binding="{Binding Type}" FontSize="18"/>

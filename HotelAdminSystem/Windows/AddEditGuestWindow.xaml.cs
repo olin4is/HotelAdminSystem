@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HotelAdminSystem.Interfaces;
 using HotelAdminSystem.Models;
 
 namespace HotelAdminSystem
@@ -20,23 +21,23 @@ namespace HotelAdminSystem
     /// </summary>
     public partial class AddEditGuestWindow : Window
     {
-        private HotelManager hotelManager;
+        private IHotelService hotelService;
         private Guest guestToEdit;
         private bool isEditMode;
 
-        public AddEditGuestWindow(HotelManager manager)
+        public AddEditGuestWindow(IHotelService hotelService)
         {
             InitializeComponent();
-            hotelManager = manager;
+            this.hotelService = hotelService;
             isEditMode = false;
             Title = "Добавление гостя";
             BirthDatePicker.SelectedDate = DateTime.Today.AddYears(-30);
         }
 
-        public AddEditGuestWindow(HotelManager manager, Guest guest)
+        public AddEditGuestWindow(IHotelService hotelService, Guest guest)
         {
             InitializeComponent();
-            hotelManager = manager;
+            this.hotelService = hotelService;
             guestToEdit = guest;
             isEditMode = true;
             Title = "Редактирование гостя";
@@ -76,7 +77,7 @@ namespace HotelAdminSystem
             bool success;
             if (isEditMode)
             {
-                success = hotelManager.UpdateGuest(
+                success = hotelService.UpdateGuest(
                     guestToEdit.Id,
                     FirstNameTextBox.Text,
                     LastNameTextBox.Text,
@@ -89,7 +90,7 @@ namespace HotelAdminSystem
             }
             else
             {
-                success = hotelManager.AddGuest(
+                success = hotelService.AddGuest(
                     FirstNameTextBox.Text,
                     LastNameTextBox.Text,
                     MiddleNameTextBox.Text,
