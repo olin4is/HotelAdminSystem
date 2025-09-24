@@ -23,9 +23,12 @@ namespace HotelAdminSystem.Helpers
         };
         public static List<Guest> Guests = new List<Guest>
         {
-            new Guest { Id = 1, FirstName = "Иван", LastName = "Иванов", MiddleName = "Иванович", PhoneNumber = "+79161234567", Passport = "123456789" },
-            new Guest { Id = 2, FirstName = "Мария", LastName = "Петрова", MiddleName = "Ивановна", PhoneNumber = "+79169876543", Passport = "987654321" },
-            new Guest { Id = 3, FirstName = "Алексей", LastName = "Сидоров", MiddleName = "Иванович", PhoneNumber = "+79161112233", Passport = "456789123" }
+            new Guest { Id = 1, FirstName = "Иван", LastName = "Иванов", MiddleName = "Иванович", PhoneNumber = "+79161234567", Passport = "123456789", DateOfBirth = DateTime.Today, Email = "ivanov@mail.ru" },
+            new Guest { Id = 2, FirstName = "Мария", LastName = "Петрова", MiddleName = "Ивановна", PhoneNumber = "+79169876543", Passport = "987654321", DateOfBirth = DateTime.Today, Email = "petrova@mail.ru" },
+            new Guest { Id = 3, FirstName = "Елена", LastName = "Попова", MiddleName = "Ивановна", PhoneNumber = "+79169457679", Passport = "987654321", DateOfBirth = DateTime.Today, Email = "popova@mail.ru" },
+            new Guest { Id = 4, FirstName = "Юрий", LastName = "Гончаров", MiddleName = "Иванович", PhoneNumber = "+791698675473", Passport = "987654321", DateOfBirth = DateTime.Today, Email = "goncharov@mail.ru" },
+            new Guest { Id = 5, FirstName = "Александр", LastName = "Денисов", MiddleName = "Иванович", PhoneNumber = "+79169876675", Passport = "987654321", DateOfBirth = DateTime.Today, Email = "denisov@mail.ru" },
+            new Guest { Id = 6, FirstName = "Алексей", LastName = "Сидоров", MiddleName = "Иванович", PhoneNumber = "+79161112233", Passport = "456789123", DateOfBirth = DateTime.Today, Email = "sidorov@mail.ru" }
         };
         public static List<Booking> Bookings = new List<Booking> 
         {

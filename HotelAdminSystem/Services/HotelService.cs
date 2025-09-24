@@ -53,7 +53,7 @@ namespace HotelAdminSystem.Services
                 StartDate = startDate,
                 EndDate = endDate,
                 BookingDate = DateTime.Now,
-                Status = BookingStatus.Confirmed,
+                Status = BookingStatus.Pending,
                 TotalPrice = room.PricePerNight * (endDate - startDate).Days,
                 SpecialRequests = specialRequests
             };

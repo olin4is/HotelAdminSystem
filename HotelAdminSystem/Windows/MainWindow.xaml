@@ -40,7 +40,7 @@
                                 <Button Content="Отметить выезд" Click="CheckOutButton_Click" 
                 Width="170" Margin="0,0,10,0" x:Name="CheckOutButton"/>
                                 <Button Content="Отменить бронирование" Click="CancelBookingButton_Click" 
-                Width="170" x:Name="CancelBookingButton"/>
+                Width="200" x:Name="CancelBookingButton"/>
                             </StackPanel>
                             <DataGrid x:Name="BookingsGrid" Margin="10" AutoGenerateColumns="False" 
               SelectionChanged="BookingsGrid_SelectionChanged" IsReadOnly="True">
