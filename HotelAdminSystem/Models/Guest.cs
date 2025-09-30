@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,21 @@ namespace HotelAdminSystem.Models
         protected override string GetFullName()
         {
             return base.GetFullName();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Guest guest)
+            {
+                return FirstName == guest.FirstName;
+            }
+            
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return FirstName.GetHashCode() + LastName.GetHashCode() + MiddleName.GetHashCode() + Passport.GetHashCode();
         }
     }
 }
