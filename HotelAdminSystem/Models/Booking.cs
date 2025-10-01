@@ -21,8 +21,6 @@ namespace HotelAdminSystem.Models
         public decimal TotalPrice { get; set; }
         public string SpecialRequests { get; set; }
 
-        public int DurationInDays => (EndDate - StartDate).Days;
-
         public string StatusDisplay => Status.GetDescription() ?? "Не указано";
     }
 }

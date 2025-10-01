@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelAdminSystem"
         mc:Ignorable="d"
-        Title="GuestSelectionWindow" Height="400" MinWidth="900">
+        Title="Выбор гостя" Height="400" MinWidth="900">
     <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="Выберите гостя:" Margin="0,0,0,10"/>

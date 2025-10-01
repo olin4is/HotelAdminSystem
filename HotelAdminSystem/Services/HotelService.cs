@@ -181,7 +181,7 @@ namespace HotelAdminSystem.Services
                     return newStatus == BookingStatus.Confirmed || newStatus == BookingStatus.Cancelled;
 
                 case BookingStatus.Confirmed:
-                    return newStatus == BookingStatus.Completed || newStatus == BookingStatus.Cancelled;
+                    return newStatus == BookingStatus.Pending || newStatus == BookingStatus.Cancelled;
 
                 case BookingStatus.Completed:
                 case BookingStatus.Cancelled:
@@ -202,7 +202,7 @@ namespace HotelAdminSystem.Services
             var booking = GetBookingById(bookingId);
             if (booking == null) return false;
 
-            return booking.Status == BookingStatus.Confirmed &&
+            return booking.Status == BookingStatus.Pending &&
                    booking.StartDate.Date <= DateTime.Today;
         }
 
