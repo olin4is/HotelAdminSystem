@@ -27,10 +27,5 @@ namespace HotelAdminSystem.Models
             
             return false;
         }
-
-        public override int GetHashCode()
-        {
-            return FirstName.GetHashCode() + LastName.GetHashCode() + MiddleName.GetHashCode() + Passport.GetHashCode();
-        }
     }
 }
