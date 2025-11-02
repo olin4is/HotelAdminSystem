@@ -27,7 +27,7 @@ namespace HotelAdminSystem
         private IHotelService hotelService;
         private Room selectedRoomForBooking;
         private Guest selectedGuest;
-        private dynamic selectedBooking;
+        private int? selectedBookingId;
 
         public MainWindow()
         {
@@ -67,7 +67,8 @@ namespace HotelAdminSystem
                 b.Status,
                 b.TotalPrice,
                 b.BookingDate,
-                b.StatusDisplay
+                b.StatusDisplay,
+                b.SpecialRequests
             }).ToList();
 
             BookingsGrid.ItemsSource = bookingView;
@@ -76,13 +77,13 @@ namespace HotelAdminSystem
 
         private void BookingsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selectedBooking = BookingsGrid.SelectedItem as dynamic;
+            selectedBookingId = (BookingsGrid.SelectedItem as dynamic)?.Id;
             UpdateBookingButtonsState();
         }
 
         private void UpdateBookingButtonsState()
         {
-            if (selectedBooking == null)
+            if (selectedBookingId == null)
             {
                 CheckInButton.IsEnabled = false;
                 CheckOutButton.IsEnabled = false;
@@ -90,7 +91,7 @@ namespace HotelAdminSystem
                 return;
             }
 
-            int bookingId = selectedBooking.Id;
+            int bookingId = selectedBookingId.Value;
             CheckInButton.IsEnabled = hotelService.CanCheckIn(bookingId);
             CheckOutButton.IsEnabled = hotelService.CanCheckOut(bookingId);
             CancelBookingButton.IsEnabled = hotelService.CanCancel(bookingId);
@@ -234,14 +235,14 @@ namespace HotelAdminSystem
         }
         private void CheckInButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedBooking == null) return;
+            if (selectedBookingId == null) return;
 
-            var result = MessageBox.Show($"Отметить заезд по бронированию #{selectedBooking.Id}?",
+            var result = MessageBox.Show($"Отметить заезд по бронированию #{selectedBookingId}?",
                                         "Подтверждение заезда", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Confirmed);
+                bool success = hotelService.UpdateBookingStatus(selectedBookingId.Value, BookingStatus.Confirmed);
                 if (success)
                 {
                     RefreshBookingsGrid();
@@ -256,20 +257,20 @@ namespace HotelAdminSystem
 
         private void CheckOutButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedBooking == null)
+            if (selectedBookingId == null)
             {
                 MessageBox.Show("Выберите бронирование для отметки выезда");
                 return;
             }
 
-            var result = MessageBox.Show($"Отметить выезд по бронированию #{selectedBooking.Id}?",
+            var result = MessageBox.Show($"Отметить выезд по бронированию #{selectedBookingId}?",
                                         "Подтверждение выезда",
                                         MessageBoxButton.YesNo,
                                         MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Completed);
+                bool success = hotelService.UpdateBookingStatus(selectedBookingId.Value, BookingStatus.Completed);
                 if (success)
                 {
                     RefreshBookingsGrid();
@@ -284,20 +285,21 @@ namespace HotelAdminSystem
 
         private void CancelBookingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedBooking == null)
+            if (selectedBookingId == null)
             {
                 MessageBox.Show("Выберите бронирование для отмены");
                 return;
             }
 
-            var result = MessageBox.Show($"Отменить бронирование #{selectedBooking.Id}?",
+
+            var result = MessageBox.Show($"Отменить бронирование #{selectedBookingId}?",
                                         "Подтверждение отмены",
                                         MessageBoxButton.YesNo,
                                         MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)
             {
-                bool success = hotelService.UpdateBookingStatus(selectedBooking.Id, BookingStatus.Cancelled);
+                bool success = hotelService.UpdateBookingStatus(selectedBookingId.Value, BookingStatus.Cancelled);
                 if (success)
                 {
                     RefreshBookingsGrid();

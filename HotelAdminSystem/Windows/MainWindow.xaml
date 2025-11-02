@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HotelAdminSystem"
         mc:Ignorable="d"
         Title="Система администратора отеля" MinHeight="600" MinWidth="1200">
-    <Grid>
+    <Grid Background="GhostWhite">
         <TabControl>
             <!-- Вкладка номеров -->
             <TabItem Header="Номера">
@@ -19,6 +19,7 @@
                                     <DataGridTextColumn Header="Тип" Binding="{Binding RoomTypeDisplay}"  FontSize="18"/>
                                     <DataGridTextColumn Header="Цена/ночь" Binding="{Binding PricePerNight, StringFormat={}{0}₽}" FontSize="18"/>
                                     <DataGridTextColumn Header="Вместимость" Binding="{Binding Capacity}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Описание" Binding="{Binding Description}" FontSize="18"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
@@ -52,6 +53,13 @@
                                     <DataGridTextColumn Header="Дата выезда" Binding="{Binding EndDate, StringFormat=d}" FontSize="18"/>
                                     <DataGridTextColumn Header="Статус" Binding="{Binding StatusDisplay}" FontSize="18"/>
                                     <DataGridTextColumn Header="Стоимость" Binding="{Binding TotalPrice, StringFormat={}{0}₽}" FontSize="18"/>
+                                    <DataGridTextColumn Header="Особые пожелания" Binding="{Binding SpecialRequests}" FontSize="18" Width="270" >
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style>
+                                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
