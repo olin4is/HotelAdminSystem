@@ -1,14 +1,16 @@
 using System;
 using HotelAdminSystem.Models;
+using HotelAdminSystem.Tests.Interfaces;
 using HotelAdminSystem.Tests.Services;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
 namespace HotelAdminSystem.Tests
 {
     [TestFixture]
     public class GuestServiceTests
     {
-        private TestHotelService _service;
+        private ITestHotelService _service;
 
         [SetUp]
         public void Setup()

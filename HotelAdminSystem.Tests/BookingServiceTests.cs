@@ -4,6 +4,7 @@ using HotelAdminSystem.Enums;
 using HotelAdminSystem.Interfaces;
 using HotelAdminSystem.Models;
 using HotelAdminSystem.Services;
+using HotelAdminSystem.Tests.Interfaces;
 using HotelAdminSystem.Tests.Services;
 using NUnit.Framework;
 
@@ -12,7 +13,7 @@ namespace HotelAdminSystem.Tests
     [TestFixture]
     public class BookingServiceTests
     {
-        private TestHotelService _servive;
+        private ITestHotelService _servive;
 
         [SetUp]
         public void SetUp()
