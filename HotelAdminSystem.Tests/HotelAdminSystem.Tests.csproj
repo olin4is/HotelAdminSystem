@@ -43,6 +43,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BookingServiceTests.cs" />
+        <Compile Include="GuestServiceTests.cs" />
+        <Compile Include="Interfaces\ITestHotelService.cs" />
+        <Compile Include="RoomServiceTests.cs" />
+        <Compile Include="Services\TestHotelService.cs" />
         <Compile Include="Tests.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

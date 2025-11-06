@@ -10,9 +10,9 @@ namespace HotelAdminSystem.Services
 {
     public class HotelService : IHotelService
     {
-        private List<Room> rooms;
-        private List<Booking> bookings;
-        private List<Guest> guests;
+        protected List<Room> rooms;
+        protected List<Booking> bookings;
+        protected List<Guest> guests;
 
         public List<Room> Rooms => rooms;
         public List<Booking> Bookings => bookings;
